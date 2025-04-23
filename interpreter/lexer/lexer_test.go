@@ -5,6 +5,7 @@ import (
 	"testing"
 )
 
+
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
 						let ten = 10;
@@ -13,6 +14,7 @@ func TestNextToken(t *testing.T) {
 						};
 
 						let result = add(five, ten);
+
 						!-/*5;
 						5 < 10 > 5;
 
@@ -45,6 +47,7 @@ func TestNextToken(t *testing.T) {
 		{token.LET, "let"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
+
 		{token.FUNCT, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
