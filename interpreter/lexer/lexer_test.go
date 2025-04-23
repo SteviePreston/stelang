@@ -1,11 +1,12 @@
 package lexer
 
 import (
+	token "github.com/steviepreston/stelang/interpreter/token"
 	"testing"
-	"stelang/token"
 )
 
-func TestNextToken( t *testing.T) {
+
+func TestNextToken(t *testing.T) {
 	input := `let five = 5;
 						let ten = 10;
 						let add = fn(x, y) {
@@ -13,13 +14,24 @@ func TestNextToken( t *testing.T) {
 						};
 
 						let result = add(five, ten);
+
+						!-/*5;
+						5 < 10 > 5;
+
+						if (5 < 10) {
+							return true;
+						} else {
+							return false;
+						}
+
+						10 == 10;
+						10 != 9;
 						`
 
 	tests := []struct {
-		expectedType     token.TokenType
-		expectedLiteral  string
-	}
-	{
+		expectedType    token.TokenType
+		expectedLiteral string
+	}{
 		{token.LET, "let"},
 		{token.IDENT, "five"},
 		{token.ASSIGN, "="},
@@ -35,7 +47,8 @@ func TestNextToken( t *testing.T) {
 		{token.LET, "let"},
 		{token.IDENT, "add"},
 		{token.ASSIGN, "="},
-		{token.FUNCTION, "fn"},
+
+		{token.FUNCT, "fn"},
 		{token.LPAREN, "("},
 		{token.IDENT, "x"},
 		{token.COMMA, ","},
@@ -67,8 +80,8 @@ func TestNextToken( t *testing.T) {
 	for i, tt := range tests {
 		tok := l.NextToken()
 
-		if tok.Type != tt.expectedType{
-			t.Fatalf("Tests[%d] - tokentype wrong. Expected: %q, Got: %q", i, tt.expectedLiteral, tok.Literal)
+		if tok.Type != tt.expectedType {
+			t.Fatalf("Tests[%d] - tokentype wrong. Expected: %q, Got: %q", i, tt.expectedType, tok.Type)
 		}
 		if tok.Literal != tt.expectedLiteral {
 			t.Fatalf("Tests[%d] - Literal wrong. Expected: %q, Got: %q", i, tt.expectedLiteral, tok.Literal)
