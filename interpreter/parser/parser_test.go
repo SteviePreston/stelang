@@ -1,12 +1,11 @@
 package parser
 
 import (
+	"fmt"
 	ast "github.com/steviepreston/stelang/interpreter/ast"
 	lexer "github.com/steviepreston/stelang/interpreter/lexer"
 	"testing"
 )
-
-//INFO: Page 75: Prefix Operators
 
 func TestLetStatement(t *testing.T) {
 	input := `
@@ -162,5 +161,65 @@ func TestIntegerLiteralExpression(t *testing.T) {
 	}
 	if literal.TokenLiteral() != "5" {
 		t.Errorf("literal.TokenLiteral not %s. Got: %s", "5", literal.TokenLiteral())
+	}
+}
+
+func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
+	integ, ok := il.(*ast.IntegerLiteral)
+	if !ok {
+		t.Errorf("il not *ast.IntegerLiteral. Got: %T", il)
+		return false
+	}
+
+	if integ.Value != value {
+		t.Errorf("integ.Value no %d. Got: %d", value, integ.Value)
+		return false
+	}
+
+	if integ.TokenLiteral() != fmt.Sprintf("%d", value) {
+		t.Errorf("integ.Value not %d. Got: %s", value, integ.TokenLiteral())
+		return false
+	}
+
+	return true
+}
+
+func TestParsingPrefixExpressions(t *testing.T) {
+	prefixTests := []struct {
+		input        string
+		operator     string
+		integerValue int64
+	}{
+		{"!5;", "!", 5},
+		{"-15;", "-", 15},
+	}
+
+	for _, tt := range prefixTests {
+		l := lexer.New(tt.input)
+		p := New(l)
+		program := p.ParseProgram()
+		checkParserErrors(t, p)
+
+		if len(program.Statements) != 1 {
+			t.Fatalf("Program.Statements does not contain %d Statements. Got: %d", 1, len(program.Statements))
+		}
+
+		stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
+		if !ok {
+			t.Fatal("Program.Statements[0] is not ast.ExpressionStatement. Got: %T", program.Statements[0])
+		}
+
+		exp, ok := stmt.Expression.(*ast.PrefixExpression)
+		if !ok {
+			t.Fatalf("stmt is no ast.PrefixExpression. Got: %t", stmt.Expression)
+		}
+
+		if exp.Operator != tt.operator {
+			t.Fatalf("exp.Operator is not '%s'. Got: %s", tt.operator, exp.Operator)
+		}
+
+		if !testIntegerLiteral(t, exp.Right, tt.integerValue) {
+			return
+		}
 	}
 }
