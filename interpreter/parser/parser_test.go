@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+//INFO: Page 99
+
 func TestLetStatement(t *testing.T) {
 	input := `
 		let x 5;
