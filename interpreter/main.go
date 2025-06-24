@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/steviepreston/stelang/repl"
+	repl "github.com/steviepreston/stelang/interpreter/repl"
 	"os"
 	"os/user"
 )
