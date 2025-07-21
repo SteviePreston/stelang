@@ -40,14 +40,14 @@ type Program struct {
 	Statements []Statement
 }
 
-type Identifer struct {
+type Identifier struct {
 	Token token.Token
 	Value string
 }
 
 type LetStatement struct {
 	Token token.Token
-	Name  *Identifer
+	Name  *Identifier
 	Value Expression
 }
 
@@ -85,7 +85,7 @@ type BlockStatement struct {
 
 type FunctionLiteral struct {
 	Token      token.Token
-	Parameters []*Identifer
+	Parameters []*Identifier
 	Body       *BlockStatement
 }
 
@@ -156,9 +156,9 @@ func (ls *LetStatement) String() string {
 	return out.String()
 }
 
-func (i *Identifer) expressionNode()      {}
-func (i *Identifer) TokenLiteral() string { return i.Token.Literal }
-func (i *Identifer) String() string       { return i.Value }
+func (i *Identifier) expressionNode()      {}
+func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
+func (i *Identifier) String() string       { return i.Value }
 
 func (il *IntegerLiteral) expressionNode()      {}
 func (il *IntegerLiteral) TokenLiteral() string { return il.Token.Literal }

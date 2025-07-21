@@ -9,13 +9,6 @@ import (
 )
 
 const PROMPT = ">> "
-const STELANG_LOGO = `
-     ___  _            _                        
-    / __|| |_    ___  | |  __ _   _ _    __ _   
-    \__ \|  _|  / -_) | | / _` + "`" + ` | | ' \  / _` + "`" + ` |  
-    |___/ \__|  \___| |_| \__,_| |_||_| \__, |  
-                                       |___/
-`
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
@@ -42,7 +35,6 @@ func Start(in io.Reader, out io.Writer) {
 }
 
 func printParserErrors(out io.Writer, errors []string) {
-	io.WriteString(out, STELANG_LOGO)
 	io.WriteString(out, "Whoops, you messed up! D:\n")
 	io.WriteString(out, "Parser Errors:\n")
 	for _, msg := range errors {
